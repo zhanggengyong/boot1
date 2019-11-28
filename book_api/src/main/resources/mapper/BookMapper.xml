@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fh.mapper.BookMapper">
+
+	<select id="queryCount" parameterType="com.fh.param.BookSearchParam" resultType="java.lang.Long">
+        select count(id) from t_book
+    </select>
+
+	<select id="queryMapList" parameterType="com.fh.param.BookSearchParam" resultType="com.fh.entity.Book">
+        select *,tt.typeName as typeName from t_book tb left join t_type tt on tb.typeId = tt.id
+		limit #{start},#{length}
+    </select>
+
+	<select id="queryTypeList"  resultType="com.fh.entity.Type">
+        select * from t_type
+    </select>
+
+    <insert id="addBook" parameterType="com.fh.entity.Book">
+      INSERT INTO t_book (name,price,publicationTime,typeId) VALUES (#{name},#{price},#{publicationTime},#{typeId})
+    </insert>
+
+    <delete id="deleteBook" parameterType="java.lang.Integer">
+		delete from t_book where id = #{id}
+	</delete>
+
+    <select id="toUpdate" parameterType="java.lang.Integer" resultType="com.fh.entity.Book">
+		select tb.*,tt.typeName as typeName from t_book tb left join t_type tt on tb.typeId = tt.id where tb.id = #{id}
+	</select>
+
+    <update id="updateBook" parameterType="com.fh.entity.Book">
+		update t_book set name = #{name} ,price = #{price},publicationTime = #{publicationTime},typeId =#{typeId} where id = #{id}
+	</update>
+
+	<!--<insert id="addGame" parameterType="com.fh.model.Game">
+        INSERT INTO tt_game (name,price,loginAccount,showTime) VALUES (#{name},#{price},#{loginAccount},#{showTime})
+    </insert>
+	-->
+
+</mapper>
